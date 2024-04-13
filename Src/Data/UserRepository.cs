@@ -1,4 +1,5 @@
 using courses_dotnet_api.Src.Interfaces;
+using courses_dotnet_api.Src.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace courses_dotnet_api.Src.Data;
@@ -15,6 +16,11 @@ public class UserRepository : IUserRepository
     public async Task<bool> UserExistsByEmailAsync(string email)
     {
         return await _dataContext.Users.AnyAsync(user => user.Email == email);
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _dataContext.Users.FirstOrDefaultAsync(user => user.Email == email);
     }
 
     public async Task<bool> UserExistsByRutAsync(string rut)

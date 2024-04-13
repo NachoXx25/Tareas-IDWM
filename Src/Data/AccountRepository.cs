@@ -60,9 +60,31 @@ public class AccountRepository : IAccountRepository
 
         return accountDto;
     }
+    public async Task<LoginDto?> GetLoginDtoAsync(string email)
+    {
+        User? user = await _dataContext
+            .Users.Where(student => student.Email == email)
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return null;
+        }
+        
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(Encoding.UTF8.GetString(user.PasswordHash), Encoding.UTF8.GetString(user.PasswordSalt));
+        LoginDto loginDto =
+            new()
+            {
+                Email = user.Email,
+                Password = passwordHash,
+            };
+
+        return loginDto;
+    }   
 
     public async Task<bool> SaveChangesAsync()
     {
         return 0 < await _dataContext.SaveChangesAsync();
     }
+
 }

@@ -1,3 +1,4 @@
+
 namespace courses_dotnet_api.Src.Models;
 
 public class User
